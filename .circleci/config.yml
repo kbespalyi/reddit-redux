@@ -8,17 +8,17 @@ jobs:
       - checkout
 
       - restore_cache:
-          key: v1-dependencies-{{ checksum "yarn.lock" }}
-
-      - run: yarn install
+          keys: 
+            - v1-dependencies-{{ checksum "yarn.lock" }}
+            - v1-dependencies-
 
       - run:
           name: Install Dependencies
-          command: yarn ci
+          command: yarn install --frozen-lockfile
 
       - save_cache:
           paths:
-            - /home/circleci/.yarn
+            - ~/.cache/yarn
             - node_modules
           key: v1-dependencies-{{ checksum "yarn.lock" }}
 
