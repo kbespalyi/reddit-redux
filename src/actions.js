@@ -19,24 +19,28 @@ export function invalidateSubreddit(subreddit) {
   }
 }
 
-function requestPosts(subreddit) {
+export function requestPosts(subreddit) {
   return {
     type: REQUEST_POSTS,
     subreddit
   }
 }
 
-function receivePosts(subreddit, json) {
+export const transformResponseBody = (json) => {
+  return json.data.children.map(child => child.data);
+}
+
+export function receivePosts(subreddit, json) {
   return {
     type: RECEIVE_POSTS,
     subreddit,
-    posts: json.data.children.map(child => child.data),
+    posts: transformResponseBody(json),
     receivedAt: Date.now()
   }
 }
 
-function fetchPosts(subreddit) {
-  return dispatch => {
+export function fetchPosts(subreddit) {
+  return (dispatch) => {
     dispatch(requestPosts(subreddit))
     return fetch(`https://www.reddit.com/r/${subreddit}.json`)
       .then(response => response.json())
@@ -44,8 +48,8 @@ function fetchPosts(subreddit) {
   }
 }
 
-function shouldFetchPosts(state, subreddit) {
-  const posts = state.postsBySubreddit[subreddit]
+export function shouldFetchPosts(state, subreddit) {
+  const posts = state.postsBySubreddit ? state.postsBySubreddit[subreddit] : undefined
   if (!posts) {
     return true
   } else if (posts.isFetching) {

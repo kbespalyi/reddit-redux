@@ -1,11 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import {
-  selectSubreddit,
-  fetchPostsIfNeeded,
-  invalidateSubreddit
-} from '../actions'
+import { selectSubreddit, fetchPostsIfNeeded, invalidateSubreddit } from '../actions'
 import Picker from '../components/Picker'
 import Posts from '../components/Posts'
 
@@ -82,9 +78,11 @@ AsyncApp.propTypes = {
 
 function mapStateToProps(state) {
   const { selectedSubreddit, postsBySubreddit } = state
-  const { isFetching, lastUpdated, items: posts } = postsBySubreddit[
-    selectedSubreddit
-  ] || {
+  const {
+    isFetching,
+    lastUpdated,
+    items: posts
+  } = postsBySubreddit[ selectedSubreddit ] || {
     isFetching: true,
     items: []
   }
@@ -98,3 +96,4 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps)(AsyncApp)
+export { AsyncApp }
